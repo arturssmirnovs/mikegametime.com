@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MikeGameTime - Games</title>
+    <meta name="description" content="Play free games made by MikeGameTime! Fighting, Snake, Runner and more.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        .font-gaming { font-family: 'Press Start 2P', cursive; }
+        .font-main { font-family: 'Poppins', sans-serif; }
+
+        body {
+            background: #0a0a1a;
+            min-height: 100vh;
+        }
+
+        .game-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .game-card:hover {
+            transform: translateY(-8px) scale(1.02);
+        }
+        .game-card:hover .game-thumb {
+            filter: brightness(1.2);
+        }
+        .game-card:hover .play-overlay {
+            opacity: 1;
+        }
+
+        .play-overlay {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .glow-text {
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5),
+                         0 0 30px rgba(147, 51, 234, 0.5);
+        }
+
+        /* Animated background grid */
+        .bg-grid {
+            background-image:
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* Tag pills */
+        .tag {
+            font-size: 0.65rem;
+            padding: 2px 8px;
+            border-radius: 9999px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Stars animation */
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        .star {
+            position: fixed;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--dur) ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .float-anim {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="font-main bg-grid text-white">
+
+<!-- Stars background -->
+<div id="stars"></div>
+
+<!-- Header -->
+<header class="relative z-10">
+    <div class="max-w-6xl mx-auto px-4 py-6 flex items-center justify-between">
+        <a href="../index.html" class="flex items-center gap-3 text-gray-400 hover:text-white transition-colors">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span class="text-sm">Back</span>
+        </a>
+
+        <a href="../index.html" class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 via-pink-500 to-orange-500 p-0.5">
+                <div class="w-full h-full rounded-full bg-gray-900 flex items-center justify-center">
+                    <i class="fa-solid fa-gamepad text-sm text-white"></i>
+                </div>
+            </div>
+            <span class="font-gaming text-sm text-white hidden sm:block">MikeGameTime</span>
+        </a>
+
+        <div class="text-gray-400 text-sm">
+            <span id="game-count">3</span> Games
+        </div>
+    </div>
+</header>
+
+<!-- Hero -->
+<section class="relative z-10 text-center py-10 px-4">
+    <h1 class="font-gaming text-3xl md:text-5xl glow-text mb-4">
+        <span class="float-anim inline-block">🎮</span> My Games
+    </h1>
+    <p class="text-gray-400 text-lg max-w-md mx-auto">
+        Free games made by Mike! Pick one and play. More coming soon!
+    </p>
+</section>
+
+<!-- Games Grid -->
+<main class="relative z-10 max-w-6xl mx-auto px-4 pb-16">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="games-grid">
+
+        <!-- FIGHTING GAME -->
+        <a href="fighting/index.html" class="game-card block rounded-2xl overflow-hidden bg-gradient-to-b from-gray-800/80 to-gray-900/80 border border-white/10 backdrop-blur-sm">
+            <div class="relative aspect-video bg-gradient-to-br from-indigo-900 via-purple-900 to-slate-900 game-thumb overflow-hidden">
+                <!-- Game preview art -->
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="text-center">
+                        <div class="text-6xl mb-2">⚔️</div>
+                        <div class="flex gap-4 justify-center text-4xl">
+                            <span>🧑</span>
+                            <span class="text-2xl text-red-400 self-center font-bold">VS</span>
+                            <span>🤖</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Decorative elements -->
+                <div class="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-r from-green-800 to-green-900"></div>
+                <div class="absolute bottom-8 left-[15%] w-20 h-2 bg-amber-800 rounded"></div>
+                <div class="absolute bottom-8 right-[15%] w-20 h-2 bg-amber-800 rounded"></div>
+
+                <!-- Play overlay -->
+                <div class="play-overlay absolute inset-0 bg-black/50 flex items-center justify-center">
+                    <div class="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border-2 border-white/50">
+                        <i class="fa-solid fa-play text-white text-2xl ml-1"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="p-4">
+                <div class="flex items-start justify-between gap-2 mb-2">
+                    <h3 class="font-bold text-lg">Mike's Fighters</h3>
+                    <span class="tag bg-red-500/20 text-red-400 border border-red-500/30 shrink-0">Fighting</span>
+                </div>
+                <p class="text-gray-400 text-sm mb-3">Battle your friends or bots! Buy weapons, skins & items in the shop. Up to 5 players!</p>
+                <div class="flex items-center gap-4 text-xs text-gray-500">
+                    <span><i class="fa-solid fa-users mr-1"></i> 1-5 Players</span>
+                    <span><i class="fa-solid fa-keyboard mr-1"></i> WASD + Space</span>
+                </div>
+            </div>
+        </a>
+
+        <!-- SNAKE GAME -->
+        <a href="snake/index.html" class="game-card block rounded-2xl overflow-hidden bg-gradient-to-b from-gray-800/80 to-gray-900/80 border border-white/10 backdrop-blur-sm">
+            <div class="relative aspect-video bg-gradient-to-br from-green-950 via-emerald-950 to-slate-900 game-thumb overflow-hidden">
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="text-center">
+                        <div class="text-6xl mb-2">🐍</div>
+                        <div class="flex gap-2 justify-center text-2xl">
+                            <span>🍎</span><span>🍎</span><span>🍎</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Grid lines -->
+                <div class="absolute inset-4 border border-green-800/30" style="background-image: linear-gradient(rgba(34,197,94,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(34,197,94,0.05) 1px, transparent 1px); background-size: 20px 20px;"></div>
+                <div class="play-overlay absolute inset-0 bg-black/50 flex items-center justify-center">
+                    <div class="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border-2 border-white/50">
+                        <i class="fa-solid fa-play text-white text-2xl ml-1"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="p-4">
+                <div class="flex items-start justify-between gap-2 mb-2">
+                    <h3 class="font-bold text-lg">Snake</h3>
+                    <span class="tag bg-green-500/20 text-green-400 border border-green-500/30 shrink-0">Classic</span>
+                </div>
+                <p class="text-gray-400 text-sm mb-3">Eat apples, grow longer, don't hit yourself! How long can you survive? Beat the high score!</p>
+                <div class="flex items-center gap-4 text-xs text-gray-500">
+                    <span><i class="fa-solid fa-user mr-1"></i> 1 Player</span>
+                    <span><i class="fa-solid fa-keyboard mr-1"></i> Arrow Keys</span>
+                </div>
+            </div>
+        </a>
+
+        <!-- RUNNER GAME -->
+        <a href="runner/index.html" class="game-card block rounded-2xl overflow-hidden bg-gradient-to-b from-gray-800/80 to-gray-900/80 border border-white/10 backdrop-blur-sm">
+            <div class="relative aspect-video bg-gradient-to-br from-orange-950 via-amber-950 to-slate-900 game-thumb overflow-hidden">
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="text-center">
+                        <div class="text-6xl mb-2">🏃</div>
+                        <div class="flex gap-3 justify-center text-2xl">
+                            <span>🌵</span><span>🦅</span><span>🌵</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Ground line -->
+                <div class="absolute bottom-6 left-0 right-0 h-0.5 bg-orange-700/40"></div>
+                <div class="play-overlay absolute inset-0 bg-black/50 flex items-center justify-center">
+                    <div class="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border-2 border-white/50">
+                        <i class="fa-solid fa-play text-white text-2xl ml-1"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="p-4">
+                <div class="flex items-start justify-between gap-2 mb-2">
+                    <h3 class="font-bold text-lg">Desert Runner</h3>
+                    <span class="tag bg-orange-500/20 text-orange-400 border border-orange-500/30 shrink-0">Runner</span>
+                </div>
+                <p class="text-gray-400 text-sm mb-3">Run, jump & dodge obstacles! The speed keeps increasing. How far can you go?</p>
+                <div class="flex items-center gap-4 text-xs text-gray-500">
+                    <span><i class="fa-solid fa-user mr-1"></i> 1 Player</span>
+                    <span><i class="fa-solid fa-keyboard mr-1"></i> Space to Jump</span>
+                </div>
+            </div>
+        </a>
+
+    </div>
+
+    <!-- Coming Soon -->
+    <div class="mt-12 text-center">
+        <p class="text-gray-500 font-gaming text-xs">MORE GAMES COMING SOON...</p>
+        <div class="flex justify-center gap-4 mt-4 text-3xl opacity-30">
+            <span>🏎️</span><span>🧩</span><span>👻</span><span>🚀</span>
+        </div>
+    </div>
+</main>
+
+<!-- Footer -->
+<footer class="relative z-10 text-center py-8 text-gray-500 text-sm border-t border-white/5">
+    <p>&copy; 2025 MikeGameTime. All rights reserved.</p>
+</footer>
+
+<script>
+    // Create background stars
+    const starsContainer = document.getElementById('stars');
+    for (let i = 0; i < 60; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.setProperty('--dur', (2 + Math.random() * 4) + 's');
+        star.style.animationDelay = Math.random() * 3 + 's';
+        starsContainer.appendChild(star);
+    }
+</script>
+</body>
+</html>

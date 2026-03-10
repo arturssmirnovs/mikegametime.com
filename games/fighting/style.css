@@ -1,0 +1,507 @@
+/* ==================== RESET & BASE ==================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #1a1a2e;
+    color: #fff;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+}
+
+/* ==================== SCREENS ==================== */
+.screen {
+    display: none;
+    width: 100vw;
+    height: 100vh;
+    flex-direction: column;
+    align-items: center;
+}
+
+.screen.active {
+    display: flex;
+}
+
+/* ==================== TOP BAR ==================== */
+.top-bar {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.coins-display {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 215, 0, 0.2);
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 2px solid gold;
+    font-size: 18px;
+    font-weight: bold;
+    color: gold;
+}
+
+.coin-icon {
+    font-size: 22px;
+}
+
+/* ==================== TITLE ==================== */
+.game-title {
+    font-size: 52px;
+    margin-top: 30px;
+    text-shadow: 0 0 20px rgba(255, 100, 0, 0.8), 0 4px 8px rgba(0,0,0,0.5);
+    color: #ff6b35;
+    letter-spacing: 4px;
+}
+
+.subtitle {
+    font-size: 20px;
+    color: #aaa;
+    margin-top: 5px;
+}
+
+/* ==================== BUTTONS ==================== */
+.btn {
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: bold;
+    transition: all 0.2s;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.15);
+}
+
+.btn:active {
+    transform: translateY(1px);
+}
+
+.btn-small {
+    padding: 8px 16px;
+    font-size: 14px;
+    background: #444;
+    color: #fff;
+}
+
+.btn-big {
+    padding: 16px 40px;
+    font-size: 20px;
+    width: 320px;
+    color: #fff;
+}
+
+.btn-green { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+.btn-blue { background: linear-gradient(135deg, #3498db, #2980b9); }
+.btn-yellow { background: linear-gradient(135deg, #f1c40f, #f39c12); color: #333 !important; }
+.btn-purple { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
+.btn-red { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+.btn-orange { background: linear-gradient(135deg, #e67e22, #d35400); }
+
+/* ==================== PLAYER SLOTS ==================== */
+.player-slots {
+    display: flex;
+    gap: 16px;
+    margin: 30px 0;
+}
+
+.player-slot {
+    width: 100px;
+    height: 120px;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.player-slot.empty {
+    background: rgba(255, 255, 255, 0.05);
+    border: 3px dashed rgba(255, 255, 255, 0.2);
+}
+
+.player-slot.empty:hover {
+    border-color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.player-slot.filled {
+    background: rgba(46, 204, 113, 0.15);
+    border: 3px solid rgba(46, 204, 113, 0.5);
+}
+
+.slot-avatar {
+    font-size: 36px;
+}
+
+.slot-name {
+    font-size: 13px;
+    color: #ccc;
+}
+
+/* ==================== MENU BUTTONS ==================== */
+.menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 10px;
+}
+
+/* ==================== POPUP ==================== */
+.popup {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.popup.hidden {
+    display: none;
+}
+
+.popup-content {
+    background: #2a2a4a;
+    padding: 30px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    min-width: 300px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.popup-content input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 2px solid #555;
+    background: #1a1a2e;
+    color: #fff;
+    font-size: 16px;
+    text-align: center;
+    font-family: inherit;
+}
+
+/* ==================== FRIENDS SCREEN ==================== */
+.friends-list {
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.friend-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 14px 20px;
+    border-radius: 12px;
+    font-size: 18px;
+}
+
+.add-friend-box {
+    display: flex;
+    gap: 10px;
+    padding: 20px;
+    width: 100%;
+    max-width: 500px;
+}
+
+.add-friend-box input {
+    flex: 1;
+    padding: 12px;
+    border-radius: 10px;
+    border: 2px solid #555;
+    background: #1a1a2e;
+    color: #fff;
+    font-size: 16px;
+    font-family: inherit;
+}
+
+/* ==================== GAME MODE SCREEN ==================== */
+.mode-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 30px;
+    width: 100%;
+    max-width: 500px;
+}
+
+.mode-btn {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    text-align: left;
+    width: 100%;
+    padding: 20px;
+}
+
+.mode-icon {
+    font-size: 36px;
+}
+
+.mode-name {
+    font-size: 22px;
+    display: block;
+}
+
+.mode-desc {
+    font-size: 14px;
+    opacity: 0.7;
+    display: block;
+}
+
+/* ==================== SHOP ==================== */
+.shop-tabs {
+    display: flex;
+    gap: 5px;
+    padding: 10px 20px;
+    width: 100%;
+    max-width: 700px;
+}
+
+.shop-tab {
+    flex: 1;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: #aaa;
+    font-size: 16px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+
+.shop-tab:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.shop-tab.active {
+    background: rgba(52, 152, 219, 0.2);
+    border-color: #3498db;
+    color: #fff;
+}
+
+.shop-items {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    padding: 20px;
+    width: 100%;
+    max-width: 700px;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.shop-item {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.shop-item:hover {
+    border-color: rgba(255, 215, 0, 0.5);
+    background: rgba(255, 215, 0, 0.05);
+    transform: translateY(-3px);
+}
+
+.shop-item.owned {
+    border-color: rgba(46, 204, 113, 0.5);
+    background: rgba(46, 204, 113, 0.1);
+}
+
+.shop-item-icon {
+    font-size: 48px;
+}
+
+.shop-item-name {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.shop-item-price {
+    font-size: 14px;
+    color: gold;
+}
+
+.shop-item-owned {
+    font-size: 13px;
+    color: #2ecc71;
+}
+
+/* ==================== FIND GAME ==================== */
+.finding-game {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    gap: 20px;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(255, 255, 255, 0.1);
+    border-top-color: #3498db;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.game-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    max-width: 500px;
+    padding: 0 20px;
+}
+
+.game-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 14px 20px;
+    border-radius: 12px;
+}
+
+/* ==================== GAME HUD ==================== */
+.game-hud {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10;
+}
+
+.hud-left, .hud-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.health-bar-container {
+    width: 200px;
+    height: 20px;
+    background: #333;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 2px solid #555;
+}
+
+.health-bar {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, #e74c3c, #2ecc71);
+    transition: width 0.3s;
+    border-radius: 8px;
+}
+
+.hud-center {
+    font-size: 28px;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+#game-canvas {
+    width: 100%;
+    height: 100%;
+}
+
+.game-controls-hint {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 20px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 8px 20px;
+    border-radius: 10px;
+    font-size: 13px;
+    color: #aaa;
+    z-index: 10;
+}
+
+/* ==================== GAME OVER ==================== */
+#gameover-screen {
+    justify-content: center;
+    gap: 20px;
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+}
+
+.gameover-title {
+    font-size: 60px;
+    text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+}
+
+.gameover-stats {
+    font-size: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 20px 40px;
+    border-radius: 16px;
+}
+
+/* ==================== SCROLLBAR ==================== */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+}
