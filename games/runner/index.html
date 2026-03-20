@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Desert Runner - MikeGameTime</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -16,6 +16,29 @@
             font-family: 'Segoe UI', sans-serif;
             color: #fff;
         }
+        /* Rotate overlay */
+        #rotate-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 9999;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #f59e0b;
+            text-align: center;
+            gap: 20px;
+            padding: 30px;
+        }
+        #rotate-overlay .rotate-icon { font-size: 64px; animation: spin 2s linear infinite; }
+        @keyframes spin { 0%,100%{transform:rotate(0deg)} 40%{transform:rotate(-90deg)} 60%{transform:rotate(-90deg)} }
+        #rotate-overlay p { font-size: 1.2rem; color: #fff; }
+        @media (orientation: portrait) and (max-width: 900px) {
+            #rotate-overlay { display: flex; }
+        }
+        /* Responsive canvas */
+        canvas { max-width: 100%; height: auto; }
         .header {
             display: flex;
             align-items: center;
@@ -78,6 +101,11 @@
     </style>
 </head>
 <body>
+
+<div id="rotate-overlay">
+    <div class="rotate-icon">📱</div>
+    <p>Rotate your device to landscape to play!</p>
+</div>
 
 <div class="header">
     <a href="../index.html">&larr; Games</a>

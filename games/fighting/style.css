@@ -5,6 +5,117 @@
     box-sizing: border-box;
 }
 
+/* ==================== ROTATE OVERLAY ==================== */
+#rotate-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: #000;
+    z-index: 99999;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #a855f7;
+    text-align: center;
+    gap: 20px;
+    padding: 30px;
+}
+#rotate-overlay .rotate-icon {
+    font-size: 64px;
+    animation: rotateSpin 2s linear infinite;
+}
+@keyframes rotateSpin {
+    0%,100% { transform: rotate(0deg); }
+    40%      { transform: rotate(-90deg); }
+    60%      { transform: rotate(-90deg); }
+}
+#rotate-overlay p { font-size: 1.2rem; color: #fff; }
+@media (orientation: portrait) and (max-width: 900px) {
+    #rotate-overlay { display: flex; }
+}
+
+/* ==================== MOBILE TOUCH CONTROLS ==================== */
+#touch-controls {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 140px;
+    z-index: 100;
+    pointer-events: none;
+}
+@media (max-width: 900px) and (orientation: landscape) {
+    #touch-controls { display: flex; }
+}
+#touch-left {
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    display: grid;
+    grid-template-columns: 48px 48px 48px;
+    grid-template-rows: 48px 48px;
+    gap: 4px;
+    pointer-events: all;
+}
+#touch-right {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    pointer-events: all;
+}
+.tc-btn {
+    background: rgba(255,255,255,0.15);
+    border: 2px solid rgba(255,255,255,0.4);
+    border-radius: 10px;
+    color: #fff;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    width: 48px;
+    height: 48px;
+}
+.tc-btn:active { background: rgba(255,255,255,0.35); }
+.tc-empty { background: transparent; border: none; width: 48px; height: 48px; }
+.tc-attack {
+    width: 64px;
+    height: 64px;
+    font-size: 26px;
+    background: rgba(255,80,80,0.3);
+    border-color: #f66;
+}
+
+/* ==================== SECRET SPACE BUTTON ==================== */
+#secret-space-btn {
+    display: none;
+    position: fixed;
+    top: 60px;
+    right: 18px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 2px solid rgba(0, 255, 200, 0.5);
+    background: rgba(0, 20, 40, 0.6);
+    color: rgba(0, 255, 200, 0.85);
+    font-size: 22px;
+    cursor: pointer;
+    z-index: 60;
+    animation: secretPulse 2.5s ease-in-out infinite;
+    backdrop-filter: blur(4px);
+}
+@keyframes secretPulse {
+    0%,100% { box-shadow: 0 0 6px rgba(0,255,200,0.2); opacity: 0.5; transform: scale(1); }
+    50%      { box-shadow: 0 0 22px rgba(0,255,200,0.9); opacity: 1; transform: scale(1.08); }
+}
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: #1a1a2e;
@@ -14,13 +125,34 @@ body {
     height: 100vh;
 }
 
+/* ==================== GALAXY BACKGROUND ==================== */
+#galaxy-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    display: none;
+}
+
+#galaxy-bg.visible {
+    display: block;
+}
+
+#start-screen {
+    position: relative;
+    z-index: 1;
+}
+
 /* ==================== SCREENS ==================== */
 .screen {
     display: none;
     width: 100vw;
-    height: 100vh;
+    min-height: 100vh;
     flex-direction: column;
     align-items: center;
+    overflow-y: auto;
 }
 
 .screen.active {
@@ -50,6 +182,12 @@ body {
     color: gold;
 }
 
+.diamonds-display {
+    background: rgba(100, 200, 255, 0.2);
+    border-color: #7df;
+    color: #7df;
+}
+
 .coin-icon {
     font-size: 22px;
 }
@@ -63,10 +201,30 @@ body {
     letter-spacing: 4px;
 }
 
-.subtitle {
-    font-size: 20px;
-    color: #aaa;
-    margin-top: 5px;
+.name-input-row {
+    margin-top: 12px;
+}
+
+.name-input-row input {
+    padding: 10px 20px;
+    font-size: 18px;
+    border-radius: 12px;
+    border: 2px solid #ff6b35;
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+    text-align: center;
+    outline: none;
+    font-family: inherit;
+    width: 260px;
+}
+
+.name-input-row input::placeholder {
+    color: #888;
+}
+
+.name-input-row input:focus {
+    border-color: #ffa070;
+    background: rgba(255,255,255,0.12);
 }
 
 /* ==================== BUTTONS ==================== */
@@ -109,6 +267,99 @@ body {
 .btn-purple { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
 .btn-red { background: linear-gradient(135deg, #e74c3c, #c0392b); }
 .btn-orange { background: linear-gradient(135deg, #e67e22, #d35400); }
+.btn-cyan   { background: linear-gradient(135deg, #00bcd4, #0097a7); }
+
+/* ==================== CREATE GAME SCREEN ==================== */
+.cg-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+    padding: 20px;
+    width: 100%;
+    max-width: 600px;
+    overflow-y: auto;
+}
+.cg-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.cg-label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #ccc;
+    letter-spacing: 0.5px;
+}
+.cg-sublabel { font-size: 11px; color: #666; font-weight: normal; }
+.cg-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: nowrap;
+}
+.cg-row-wrap { flex-wrap: wrap; }
+
+/* Difficulty buttons */
+.cg-diff-btn {
+    flex: 1;
+    padding: 10px 6px;
+    font-size: 13px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.08);
+    border: 2px solid rgba(255,255,255,0.15);
+    color: #aaa;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+.cg-easy.cg-selected    { background: rgba(46,204,113,0.25);  border-color: #2ecc71; color: #2ecc71; }
+.cg-normal.cg-selected  { background: rgba(52,152,219,0.25);  border-color: #3498db; color: #7df; }
+.cg-hard.cg-selected    { background: rgba(231,76,60,0.25);   border-color: #e74c3c; color: #f88; }
+.cg-extreme.cg-selected { background: rgba(155,89,182,0.3);   border-color: #9b59b6; color: #d88dff; }
+
+/* Mode buttons */
+.cg-mode-btn {
+    padding: 10px 14px;
+    font-size: 13px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.08);
+    border: 2px solid rgba(255,255,255,0.15);
+    color: #aaa;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+.cg-mode-btn.cg-selected {
+    background: rgba(0,188,212,0.25);
+    border-color: #00bcd4;
+    color: #0ff;
+}
+
+/* Counter */
+.cg-counter {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.cg-counter-btn {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    font-size: 18px;
+    padding: 0;
+    background: rgba(255,255,255,0.1);
+    border: 2px solid rgba(255,255,255,0.2);
+    color: #fff;
+    cursor: pointer;
+    line-height: 1;
+}
+.cg-counter-btn:hover { background: rgba(255,255,255,0.2); }
+.cg-count {
+    font-size: 36px;
+    font-weight: bold;
+    color: #fff;
+    min-width: 50px;
+    text-align: center;
+}
+.cg-start { margin-top: 10px; width: 220px; }
 
 /* ==================== PLAYER SLOTS ==================== */
 .player-slots {
@@ -156,10 +407,13 @@ body {
 
 /* ==================== MENU BUTTONS ==================== */
 .menu-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
     margin-top: 10px;
+    padding: 0 20px 30px;
+    width: 100%;
+    max-width: 500px;
 }
 
 /* ==================== POPUP ==================== */
@@ -365,6 +619,244 @@ body {
     color: #2ecc71;
 }
 
+.shop-item-effect {
+    font-size: 11px;
+    color: #aaa;
+    text-align: center;
+    line-height: 1.3;
+}
+
+.shop-tab-premium {
+    background: linear-gradient(135deg, rgba(100,200,255,0.1), rgba(160,100,255,0.1));
+    border-color: rgba(100,200,255,0.3);
+    color: #7df;
+}
+
+.shop-tab-premium.active {
+    background: linear-gradient(135deg, rgba(100,200,255,0.25), rgba(160,100,255,0.25));
+    border-color: #7df;
+    color: #fff;
+}
+
+.shop-item.premium-item {
+    border-color: rgba(100, 200, 255, 0.3);
+    background: linear-gradient(135deg, rgba(100,200,255,0.05), rgba(160,100,255,0.05));
+}
+
+.shop-item.premium-item:hover {
+    border-color: #7df;
+    background: linear-gradient(135deg, rgba(100,200,255,0.12), rgba(160,100,255,0.12));
+}
+
+.diamond-price {
+    color: #7df !important;
+    font-weight: bold;
+}
+
+.premium-header {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 10px 16px;
+    background: linear-gradient(135deg, rgba(100,200,255,0.1), rgba(160,100,255,0.1));
+    border: 1px solid rgba(100,200,255,0.3);
+    border-radius: 10px;
+    color: #7df;
+    font-size: 13px;
+}
+
+/* ==================== VIP SHOP ==================== */
+.shop-tab-vip {
+    background: linear-gradient(135deg, rgba(255,215,0,0.12), rgba(255,140,0,0.08));
+    border-color: rgba(255,215,0,0.35);
+    color: #ffe066;
+    font-weight: bold;
+}
+.shop-tab-vip.active {
+    background: linear-gradient(135deg, rgba(255,215,0,0.28), rgba(255,140,0,0.2));
+    border-color: gold;
+    color: #fff;
+}
+
+/* VIP locked banner at top */
+.vip-header-locked {
+    background: linear-gradient(135deg, rgba(80,60,0,0.4), rgba(40,40,40,0.4)) !important;
+    border-color: rgba(180,140,0,0.4) !important;
+    color: #cca000 !important;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-align: left;
+}
+.vip-banner-title { font-size: 13px; font-weight: bold; }
+.vip-banner-reqs  { display: flex; gap: 16px; flex-wrap: wrap; }
+.vip-req {
+    width: 100%;
+    max-width: 380px;
+    color: #ccc;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.vip-req-done { color: #4ade80; }
+.vip-req-done .vip-bar { background: #4ade80 !important; }
+.vip-bar-wrap {
+    height: 10px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 999px;
+    overflow: hidden;
+}
+.vip-bar {
+    height: 100%;
+    background: linear-gradient(90deg, gold, #ff9900);
+    border-radius: 999px;
+    transition: width 0.4s;
+    min-width: 2px;
+}
+.vip-bar-player { background: linear-gradient(90deg, #ff6060, #ff0000); }
+
+/* VIP header banner */
+.vip-header {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, rgba(255,215,0,0.12), rgba(255,140,0,0.08));
+    border: 1px solid rgba(255,215,0,0.4);
+    border-radius: 10px;
+    color: gold;
+    font-size: 14px;
+    font-weight: bold;
+    text-shadow: 0 0 8px rgba(255,215,0,0.5);
+}
+
+/* League section headers */
+.vip-league-header {
+    grid-column: 1 / -1;
+    padding: 8px 14px;
+    border-left: 4px solid gold;
+    background: rgba(255,255,255,0.04);
+    border-radius: 0 8px 8px 0;
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    margin-top: 6px;
+}
+
+/* VIP items */
+.shop-item.vip-item {
+    border-color: rgba(255,215,0,0.35);
+    background: linear-gradient(135deg, rgba(255,215,0,0.06), rgba(255,140,0,0.04));
+    position: relative;
+    overflow: hidden;
+}
+.shop-item.vip-item:hover:not(.vip-item-locked) {
+    border-color: gold;
+    background: linear-gradient(135deg, rgba(255,215,0,0.14), rgba(255,140,0,0.1));
+    box-shadow: 0 0 16px rgba(255,215,0,0.25);
+}
+
+/* Locked state */
+.shop-item.vip-item-locked {
+    opacity: 0.55;
+    cursor: not-allowed;
+    filter: saturate(0.4);
+}
+.vip-item-lock-overlay {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    font-size: 16px;
+    opacity: 0.9;
+}
+
+.vip-free-price   { color: #ffe066 !important; font-weight: bold; }
+.vip-coin-price   { color: #ffd700 !important; font-weight: bold; }
+.vip-locked-price { color: #888 !important; font-size: 11px; }
+
+.hud-build {
+    align-items: center;
+    gap: 4px;
+    background: rgba(106,90,255,0.3);
+    border: 2px solid #6a5aff;
+    border-radius: 10px;
+    padding: 4px 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+}
+
+/* ==================== INVENTORY ==================== */
+.inventory-body {
+    width: 100%;
+    max-width: 700px;
+    padding: 20px;
+    overflow-y: auto;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.inv-section-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #aaa;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid rgba(255,255,255,0.08);
+}
+
+.inv-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.inv-card {
+    background: rgba(255,255,255,0.06);
+    border: 2px solid rgba(255,255,255,0.12);
+    border-radius: 14px;
+    padding: 14px 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    min-width: 90px;
+    transition: transform 0.15s;
+}
+
+.inv-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(255,200,50,0.4);
+}
+
+.inv-card.equipped {
+    border-color: #f1c40f;
+    background: rgba(241,196,15,0.1);
+}
+
+.inv-card-icon {
+    font-size: 36px;
+}
+
+.inv-card-name {
+    font-size: 12px;
+    color: #ccc;
+    text-align: center;
+}
+
+.inv-card-badge {
+    font-size: 10px;
+    color: #f1c40f;
+    font-weight: bold;
+}
+
+.inv-empty {
+    color: #555;
+    font-size: 14px;
+    padding: 10px 0;
+}
+
 /* ==================== FIND GAME ==================== */
 .finding-game {
     display: flex;
@@ -455,6 +947,23 @@ body {
     height: 100%;
 }
 
+#prem-ability-hud {
+    position: absolute;
+    top: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, rgba(100,200,255,0.25), rgba(160,100,255,0.25));
+    border: 2px solid #7df;
+    border-radius: 12px;
+    padding: 8px 20px;
+    color: #fff;
+    font-size: 15px;
+    font-weight: bold;
+    z-index: 20;
+    pointer-events: none;
+    text-shadow: 0 0 8px #7df;
+}
+
 .game-controls-hint {
     position: absolute;
     bottom: 10px;
@@ -468,6 +977,106 @@ body {
     font-size: 13px;
     color: #aaa;
     z-index: 10;
+}
+
+/* ==================== PAUSE OVERLAY ==================== */
+#pause-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.88);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    overflow: hidden;
+}
+
+#pause-bg-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+#pause-overlay.hidden {
+    display: none;
+}
+
+.pause-content {
+    position: relative;
+    z-index: 1;
+    background: rgba(10, 5, 20, 0.85);
+    border: 2px solid rgba(255,255,255,0.1);
+    border-radius: 24px;
+    padding: 30px;
+    min-width: 380px;
+    max-width: 560px;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
+.pause-title {
+    text-align: center;
+    font-size: 32px;
+    color: #fff;
+}
+
+.pause-inv-title {
+    font-size: 18px;
+    color: #aaa;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid rgba(255,255,255,0.08);
+}
+
+.game-inv-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.game-inv-card {
+    background: rgba(255,255,255,0.06);
+    border: 2px solid rgba(255,255,255,0.12);
+    border-radius: 14px;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    min-width: 90px;
+}
+
+.pause-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.pause-buttons .btn-big {
+    width: auto;
+    padding: 12px 28px;
+    font-size: 16px;
+}
+
+/* ==================== KILL COIN POPUP ==================== */
+#kill-coins-popup {
+    position: absolute;
+    top: 80px;
+    right: 30px;
+    font-size: 28px;
+    font-weight: bold;
+    color: gold;
+    text-shadow: 0 0 10px rgba(255,215,0,0.8), 0 2px 4px rgba(0,0,0,0.6);
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+    z-index: 20;
 }
 
 /* ==================== GAME OVER ==================== */

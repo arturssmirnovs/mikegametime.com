@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Snake - MikeGameTime</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -16,6 +16,54 @@
             font-family: 'Segoe UI', sans-serif;
             color: #fff;
         }
+        /* Rotate overlay */
+        #rotate-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 9999;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #4ade80;
+            text-align: center;
+            gap: 20px;
+            padding: 30px;
+        }
+        #rotate-overlay .rotate-icon { font-size: 64px; animation: spin 2s linear infinite; }
+        @keyframes spin { 0%,100%{transform:rotate(0deg)} 40%{transform:rotate(-90deg)} 60%{transform:rotate(-90deg)} }
+        #rotate-overlay p { font-size: 1.2rem; color: #fff; }
+        @media (orientation: portrait) and (max-width: 900px) {
+            #rotate-overlay { display: flex; }
+        }
+        /* Responsive canvas */
+        canvas { max-width: 100%; height: auto; }
+        /* Mobile D-pad */
+        #dpad {
+            display: none;
+            margin-top: 20px;
+            grid-template-columns: 50px 50px 50px;
+            grid-template-rows: 50px 50px 50px;
+            gap: 4px;
+        }
+        @media (max-width: 900px) and (orientation: landscape) { #dpad { display: grid; } }
+        .dpad-btn {
+            background: rgba(74,222,128,0.2);
+            border: 2px solid #4ade80;
+            border-radius: 8px;
+            color: #4ade80;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+        }
+        .dpad-btn:active { background: rgba(74,222,128,0.4); }
+        .dpad-empty { background: transparent; border: none; }
         .header {
             display: flex;
             align-items: center;
@@ -80,6 +128,11 @@
 </head>
 <body>
 
+<div id="rotate-overlay">
+    <div class="rotate-icon">📱</div>
+    <p>Rotate your device to landscape to play!</p>
+</div>
+
 <div class="header">
     <a href="../index.html">&larr; Games</a>
     <h1>🐍 Snake</h1>
@@ -91,7 +144,19 @@
 </div>
 
 <canvas id="game" width="480" height="480"></canvas>
-<p class="controls-hint">Arrow keys or WASD to move</p>
+<p class="controls-hint">Arrow keys or WASD to move · Swipe on mobile</p>
+
+<div id="dpad">
+    <div class="dpad-empty"></div>
+    <div class="dpad-btn" id="btn-up">▲</div>
+    <div class="dpad-empty"></div>
+    <div class="dpad-btn" id="btn-left">◀</div>
+    <div class="dpad-empty"></div>
+    <div class="dpad-btn" id="btn-right">▶</div>
+    <div class="dpad-empty"></div>
+    <div class="dpad-btn" id="btn-down">▼</div>
+    <div class="dpad-empty"></div>
+</div>
 
 <div id="start-overlay">
     <h2>🐍</h2>
@@ -268,6 +333,39 @@ document.addEventListener('keydown', (e) => {
 // Initial draw
 init();
 draw();
+
+// Touch swipe controls
+let touchStartX = 0, touchStartY = 0;
+canvas.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+    e.preventDefault();
+}, { passive: false });
+canvas.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    if (Math.abs(dx) < 10 && Math.abs(dy) < 10) return;
+    if (Math.abs(dx) > Math.abs(dy)) {
+        if (dx > 0 && dir.x !== -1) nextDir = { x: 1, y: 0 };
+        else if (dx < 0 && dir.x !== 1) nextDir = { x: -1, y: 0 };
+    } else {
+        if (dy > 0 && dir.y !== -1) nextDir = { x: 0, y: 1 };
+        else if (dy < 0 && dir.y !== 1) nextDir = { x: 0, y: -1 };
+    }
+    e.preventDefault();
+}, { passive: false });
+
+// D-pad buttons
+function dpadDir(dx, dy) {
+    if (dx === 0 && dy === -1 && dir.y !== 1)  nextDir = { x: 0, y: -1 };
+    if (dx === 0 && dy === 1  && dir.y !== -1) nextDir = { x: 0, y:  1 };
+    if (dx === -1 && dy === 0 && dir.x !== 1)  nextDir = { x: -1, y: 0 };
+    if (dx === 1  && dy === 0 && dir.x !== -1) nextDir = { x:  1, y: 0 };
+}
+document.getElementById('btn-up').addEventListener('touchstart',    (e) => { dpadDir(0,-1); e.preventDefault(); }, { passive: false });
+document.getElementById('btn-down').addEventListener('touchstart',  (e) => { dpadDir(0, 1); e.preventDefault(); }, { passive: false });
+document.getElementById('btn-left').addEventListener('touchstart',  (e) => { dpadDir(-1,0); e.preventDefault(); }, { passive: false });
+document.getElementById('btn-right').addEventListener('touchstart', (e) => { dpadDir( 1,0); e.preventDefault(); }, { passive: false });
 </script>
 </body>
 </html>

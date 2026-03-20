@@ -2,24 +2,37 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Mike's Fighting Game</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+<div id="rotate-overlay">
+    <div class="rotate-icon">📱</div>
+    <p>Rotate your device to landscape to play!</p>
+</div>
+
+<canvas id="galaxy-bg"></canvas>
 
 <!-- ==================== START SCREEN ==================== -->
 <div id="start-screen" class="screen active">
     <div class="top-bar">
         <div class="coins-display">
             <span class="coin-icon">🪙</span>
-            <span id="coins-amount">500</span>
+            <span id="coins-amount">10</span>
         </div>
-        <button class="btn btn-small" id="sign-in-btn">👤 Sign In</button>
+        <div class="coins-display diamonds-display">
+            <span class="coin-icon">💎</span>
+            <span id="diamonds-amount">5</span>
+        </div>
     </div>
 
+    <button class="btn btn-big btn-cyan" onclick="showCreateGame()" style="margin-bottom:10px">⚙️ Create Game</button>
     <h1 class="game-title">⚔️ MIKE'S FIGHTERS ⚔️</h1>
-    <p class="subtitle">Battle your friends!</p>
+    <div class="name-input-row">
+        <input type="text" id="player-name-input" placeholder="Enter your name..." maxlength="15">
+    </div>
 
     <!-- Player slots -->
     <div class="player-slots">
@@ -48,19 +61,11 @@
     <!-- Main menu buttons -->
     <div class="menu-buttons">
         <button class="btn btn-big btn-green" onclick="showScreen('mode-screen')">🎮 Select Game Mode</button>
+        <button class="btn btn-big" onclick="startPractice()" style="background:linear-gradient(135deg,#555,#333)">🥊 Practice</button>
         <button class="btn btn-big btn-blue" onclick="findGame()">🔍 Find Game</button>
         <button class="btn btn-big btn-yellow" onclick="showScreen('shop-screen')">🛒 Shop</button>
+        <button class="btn btn-big btn-orange" onclick="showScreen('inventory-screen')">🎒 My Items</button>
         <button class="btn btn-big btn-purple" onclick="showScreen('friends-screen')">👥 Add Friends</button>
-    </div>
-</div>
-
-<!-- ==================== SIGN IN POPUP ==================== -->
-<div id="signin-popup" class="popup hidden">
-    <div class="popup-content">
-        <h2>👤 Sign In</h2>
-        <input type="text" id="username-input" placeholder="Enter your name..." maxlength="15">
-        <button class="btn btn-green" onclick="signIn()">Sign In</button>
-        <button class="btn btn-small" onclick="closePopup('signin-popup')">Cancel</button>
     </div>
 </div>
 
@@ -122,6 +127,16 @@
             <span class="mode-name">Boss Fight</span>
             <span class="mode-desc">All vs Boss!</span>
         </button>
+        <button class="btn btn-big mode-btn" style="background:linear-gradient(135deg,#0b1a3e,#1a3a8a)" onclick="selectMode('space')">
+            <span class="mode-icon">🚀</span>
+            <span class="mode-name" style="color:#7df;text-shadow:0 0 8px #3af">Space Mode</span>
+            <span class="mode-desc" style="color:#adf">Everyone becomes an astronaut!</span>
+        </button>
+        <button class="btn btn-big mode-btn" style="background:linear-gradient(135deg,#0b3e1a,#1a8a3a)" onclick="selectMode('hideseek')">
+            <span class="mode-icon">🙈</span>
+            <span class="mode-name" style="color:#7f3;text-shadow:0 0 8px #3f3">Hide &amp; Seek</span>
+            <span class="mode-desc" style="color:#afa">Seeker finds everyone!</span>
+        </button>
     </div>
 </div>
 
@@ -132,14 +147,26 @@
         <h2>🛒 Shop</h2>
         <div class="coins-display">
             <span class="coin-icon">🪙</span>
-            <span id="shop-coins">500</span>
+            <span id="shop-coins">10</span>
+        </div>
+        <div class="coins-display diamonds-display">
+            <span class="coin-icon">💎</span>
+            <span id="shop-diamonds">5</span>
+        </div>
+        <div class="coins-display" style="background:rgba(255,200,0,0.15);border-color:#ffd700">
+            <span class="coin-icon">🥇</span>
+            <span id="shop-gold">0</span>
         </div>
     </div>
 
     <div class="shop-tabs">
         <button class="shop-tab active" onclick="showShopTab('weapons')">⚔️ Weapons</button>
-        <button class="shop-tab" onclick="showShopTab('items')">🎒 Items</button>
+        <button class="shop-tab" onclick="showShopTab('items')">🧪 Items</button>
+        <button class="shop-tab" onclick="showShopTab('gear')">🪖 Gear</button>
+        <button class="shop-tab" onclick="showShopTab('powers')">⚡ Powers</button>
         <button class="shop-tab" onclick="showShopTab('skins')">👕 Skins</button>
+        <button class="shop-tab shop-tab-premium" onclick="showShopTab('premium')">💎 Premium</button>
+        <button class="shop-tab shop-tab-vip" onclick="showShopTab('vip')">💠 VIP</button>
     </div>
 
     <div class="shop-items" id="shop-items">
@@ -160,6 +187,40 @@
     </div>
 </div>
 
+<!-- ==================== INVENTORY SCREEN ==================== -->
+<div id="inventory-screen" class="screen">
+    <div class="top-bar">
+        <button class="btn btn-small" onclick="showScreen('start-screen')">⬅ Back</button>
+        <h2>🎒 My Items</h2>
+        <div class="coins-display">
+            <span class="coin-icon">🪙</span>
+            <span id="inv-coins">500</span>
+        </div>
+    </div>
+    <div class="inventory-body">
+        <div class="inv-section">
+            <div class="inv-section-title">⚔️ Weapons</div>
+            <div class="inv-grid" id="inv-weapons"></div>
+        </div>
+        <div class="inv-section">
+            <div class="inv-section-title">🧪 Items</div>
+            <div class="inv-grid" id="inv-items"></div>
+        </div>
+        <div class="inv-section">
+            <div class="inv-section-title">🪖 Gear</div>
+            <div class="inv-grid" id="inv-gear"></div>
+        </div>
+        <div class="inv-section">
+            <div class="inv-section-title">⚡ Powers</div>
+            <div class="inv-grid" id="inv-powers"></div>
+        </div>
+        <div class="inv-section">
+            <div class="inv-section-title">👕 Skins</div>
+            <div class="inv-grid" id="inv-skins"></div>
+        </div>
+    </div>
+</div>
+
 <!-- ==================== GAME SCREEN ==================== -->
 <div id="game-screen" class="screen">
     <div class="game-hud">
@@ -173,15 +234,112 @@
             <span id="game-timer">2:00</span>
         </div>
         <div class="hud-right">
+            <div class="hud-build" id="hud-build" style="display:none">🏗️ <span id="build-count">5</span></div>
             <span id="kill-count">Kills: 0</span>
         </div>
     </div>
+    <div id="kill-coins-popup"></div>
+
+    <!-- Pause overlay -->
+    <div id="pause-overlay" class="hidden">
+        <canvas id="pause-bg-canvas"></canvas>
+        <div class="pause-content">
+            <h2 class="pause-title">⏸️ PAUSED</h2>
+            <div class="pause-inv-section">
+                <h3 class="pause-inv-title">🎒 Inventory</h3>
+                <div class="game-inv-grid" id="game-inv-grid"></div>
+            </div>
+            <div class="pause-buttons">
+                <button class="btn btn-big btn-green" onclick="togglePause()">▶ Resume</button>
+                <button class="btn btn-big btn-red" onclick="endGame()">🚪 Quit</button>
+            </div>
+        </div>
+    </div>
+
     <canvas id="game-canvas"></canvas>
+    <div id="prem-ability-hud" style="display:none"></div>
     <div class="game-controls-hint">
         <span>WASD = Move</span>
         <span>SPACE = Attack</span>
-        <span>E = Use Item</span>
-        <span>ESC = Pause</span>
+        <span>E = Premium Ability</span>
+        <span>B = Build</span>
+        <span>F = Hide (H&amp;S)</span>
+        <span>ESC = Pause / Inventory</span>
+    </div>
+</div>
+
+<!-- ==================== CREATE GAME SCREEN ==================== -->
+<div id="create-game-screen" class="screen">
+    <div class="top-bar">
+        <button class="btn btn-small" onclick="showScreen('start-screen')">⬅ Back</button>
+        <h2>⚙️ Create Game</h2>
+    </div>
+
+    <div class="cg-body">
+
+        <!-- Difficulty -->
+        <div class="cg-section">
+            <div class="cg-label">⚔️ Difficulty</div>
+            <div class="cg-row">
+                <button class="btn cg-diff-btn cg-easy"    id="diff-easy"    onclick="cgSetDiff('easy')">😊 Easy</button>
+                <button class="btn cg-diff-btn cg-normal"  id="diff-normal"  onclick="cgSetDiff('normal')">😐 Normal</button>
+                <button class="btn cg-diff-btn cg-hard"    id="diff-hard"    onclick="cgSetDiff('hard')">😤 Hard</button>
+                <button class="btn cg-diff-btn cg-extreme" id="diff-extreme" onclick="cgSetDiff('extreme')">💀 Extreme</button>
+            </div>
+        </div>
+
+        <!-- Game mode -->
+        <div class="cg-section">
+            <div class="cg-label">🎮 Game Mode</div>
+            <div class="cg-row cg-row-wrap">
+                <button class="btn cg-mode-btn" id="cgmode-freeforall" onclick="cgSetMode('freeforall')">⚔️ Free For All</button>
+                <button class="btn cg-mode-btn" id="cgmode-teams"      onclick="cgSetMode('teams')">👥 Team Battle</button>
+                <button class="btn cg-mode-btn" id="cgmode-boss"       onclick="cgSetMode('boss')">👹 Boss Fight</button>
+                <button class="btn cg-mode-btn" id="cgmode-space"      onclick="cgSetMode('space')">🚀 Space Mode</button>
+                <button class="btn cg-mode-btn" id="cgmode-hideseek"  onclick="cgSetMode('hideseek')">🙈 Hide &amp; Seek</button>
+            </div>
+        </div>
+
+        <!-- Players -->
+        <div class="cg-section">
+            <div class="cg-label">🧑 Players <span class="cg-sublabel">(up to 5 — CPU-controlled except you)</span></div>
+            <div class="cg-counter">
+                <button class="btn cg-counter-btn" onclick="cgSubPlayer()">➖</button>
+                <span class="cg-count" id="cg-player-count">1</span>
+                <button class="btn cg-counter-btn" onclick="cgAddPlayer()">➕</button>
+            </div>
+        </div>
+
+        <!-- Bots -->
+        <div class="cg-section">
+            <div class="cg-label">🤖 Bots <span class="cg-sublabel">(up to 5)</span></div>
+            <div class="cg-counter">
+                <button class="btn cg-counter-btn" onclick="cgSubBot()">➖</button>
+                <span class="cg-count" id="cg-bot-count">3</span>
+                <button class="btn cg-counter-btn" onclick="cgAddBot()">➕</button>
+            </div>
+        </div>
+
+        <button class="btn btn-big btn-green cg-start" onclick="startCustomGame()">🚀 Start Game</button>
+    </div>
+</div>
+
+<!-- Secret space button — appears in space mode when bots are alive -->
+<button id="secret-space-btn" title="???">🛸</button>
+
+<!-- Mobile touch controls (shown only in landscape on small screens) -->
+<div id="touch-controls">
+    <div id="touch-left">
+        <div class="tc-empty"></div>
+        <div class="tc-btn" id="tc-up">▲</div>
+        <div class="tc-empty"></div>
+        <div class="tc-btn" id="tc-left">◀</div>
+        <div class="tc-empty"></div>
+        <div class="tc-btn" id="tc-right">▶</div>
+    </div>
+    <div id="touch-right">
+        <div class="tc-btn tc-attack" id="tc-attack">⚔️</div>
+        <div class="tc-btn" id="tc-pause">⏸</div>
     </div>
 </div>
 
